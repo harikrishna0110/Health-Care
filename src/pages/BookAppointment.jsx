@@ -1,35 +1,21 @@
 import Footer from "../components/Footer/footer";
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import { CalendarIcon } from "@heroicons/react/solid";
+import React, { useState, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import TimePicker from 'react-time-picker';
-import moment from "moment";
 
 const BookAppointment = () => {
-  const [time, setTime] = useState(new Date());
-  const handleTimeChange = (newTime) => {
-    setTime(newTime);
+  const timeSlots = ["9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM"];
+  const today = new Date().toISOString().split("T")[0];
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(timeSlots[0]);
+  const handleSubmit = (event) => {
+    event.preventDefault();
   };
-  // const [isScheduling, setIsScheduling] = useState(false);
-  // const [isScheduled, setIsScheduled] = useState(false);
-  // const [scheduleErr, setScheduleErr] = useState("");
-  // const handleScheduled = (date) => {
-  //   setIsScheduling(true);
-  //   setScheduleErr("");
-  //   fakeRequest(date)
-  //     .then((json) => {
-  //       setScheduleErr("");
-  //       setIsScheduled(true);
-  //       console.log("fake response: ", json);
-  //     })
-  //     .catch((err) => {
-  //       setScheduleErr(err);
-  //     })
-  //     .finally(() => {
-  //       setIsScheduling(false);
-  //     });
-  // };
+  const handleTimeSlotSelect = (timeSlot) => {
+    setSelectedTimeSlot(timeSlot);
+  };
+  const [selectedDate, setSelectedDate] = useState("");
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
 
   return (
     <div className="bg-blue-300">
@@ -41,7 +27,7 @@ const BookAppointment = () => {
             </div>
 
             <div>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="lg:max-w-lg lg:mx-auto  ">
                   <div className=" sm:p-7 flex flex-col bg-white rounded-2xl shadow-lg bg-white">
                     <div className="text-center">
@@ -167,69 +153,77 @@ const BookAppointment = () => {
                             </label>
                           </div>
                         </div>
-                        {/* <div className="flex justify-start bg-gray-200 p-4 rounded-lg items-center">
-      <CalendarIcon className="h-6 w-6 text-gray-600 mr-3" />
-      <DatePicker
-        className="border rounded px-3 bg-gray-200 py-2 w-full"
-        selected={selectedDate}
-        onChange={(date) => setSelectedDate(date)}
-        minDate={new Date()}
-        dateFormat="dd/MM/yyyy" // Set the date format as needed
-        placeholderText="Select a date"
-        // Disable past dates
-        todayButton="Today" // Button to select today's date
-        showYearDropdown // Display dropdown to select year
-        scrollableYearDropdown // Allow scrolling year dropdown
-        yearDropdownItemNumber={10} // Display 10 years at a time
-      />
-    </div> */}
-                       <div>
-      <TimePicker
-        onChange={handleTimeChange}
-        value={time}
-        clearIcon={null} // Hides the clear icon
-      />
-      <p>Selected time: {time.toLocaleTimeString()}</p> {/* Convert Date object to string */}
-    </div>
-    
-                        {/* <div>
-                          <DatePicker
-                            showIcon
-                            selected={startDate}
-                            onChange={(date) => setStartDate(date)}
-                            icon={
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="1em"
-                                height="1em"
-                                viewBox="0 0 48 48"
+
+                        <div>
+                          <div className="relative">
+                            <input
+                              type="date"
+                              id="datePicker"
+                              value={selectedDate}
+                              min={today}
+                              onChange={handleDateChange}
+                              className="peer p-4 block w-full border-gray-200 rounded-lg text-sm placeholder:text-transparent focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+                      focus:pt-6
+                      focus:pb-2
+                      [&:not(:placeholder-shown)]:pt-6
+                      [&:not(:placeholder-shown)]:pb-2
+                      autofill:pt-6
+                      autofill:pb-2"
+                              placeholder="enter date"
+                            />
+                            <label
+                              for="date"
+                              className="absolute top-0 start-0 p-4 h-full text-sm truncate pointer-events-none transition ease-in-out duration-100 border border-transparent dark:text-red peer-disabled:opacity-50 peer-disabled:pointer-events-none
+                        peer-focus:text-xs
+                        peer-focus:-translate-y-1.5
+                        peer-focus:text-gray-500
+                        peer-[:not(:placeholder-shown)]:text-xs
+                        peer-[:not(:placeholder-shown)]:-translate-y-1.5
+                        peer-[:not(:placeholder-shown)]:text-gray-500"
+                            >
+                              Date
+                            </label>
+                            <style>
+                              {`
+        input[type="date"]::-webkit-calendar-picker-indicator {
+          filter: invert(1); /* Invert the color to white */
+        }
+      `}
+                            </style>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h2>Select a Time Slot:</h2>
+                          <div className="flex flex-wrap gap-2">
+                            {timeSlots.map((timeSlot, index) => (
+                              <button
+                                key={index}
+                                onClick={() => handleTimeSlotSelect(timeSlot)}
+                                className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
+                                  selectedTimeSlot === timeSlot
+                                    ? "bg-blue-700"
+                                    : ""
+                                }`}
                               >
-                                <mask id="ipSApplication0">
-                                  <g
-                                    fill="none"
-                                    stroke="#fff"
-                                    strokeLinejoin="round"
-                                    strokeWidth="4"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      d="M40.04 22v20h-32V22"
-                                    ></path>
-                                    <path
-                                      fill="#fff"
-                                      d="M5.842 13.777C4.312 17.737 7.263 22 11.51 22c3.314 0 6.019-2.686 6.019-6a6 6 0 0 0 6 6h1.018a6 6 0 0 0 6-6c0 3.314 2.706 6 6.02 6c4.248 0 7.201-4.265 5.67-8.228L39.234 6H8.845l-3.003 7.777Z"
-                                    ></path>
-                                  </g>
-                                </mask>
-                                <path
-                                  fill="currentColor"
-                                  d="M0 0h48v48H0z"
-                                  mask="url(#ipSApplication0)"
-                                ></path>
-                              </svg>
-                            }
-                          />
-                        </div> */}
+                                {timeSlot}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          {selectedTimeSlot && (
+                            <p>You have selected: {selectedTimeSlot}</p>
+                          )}
+                        </div>
+
+                        {selectedDate && (
+                          <p>
+                            Selected date:{" "}
+                            {new Date(selectedDate).toLocaleDateString()}
+                          </p>
+                        )}
                       </div>
 
                       <div class="mt-5">

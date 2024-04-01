@@ -18,6 +18,7 @@ import BookAppointment from "./pages/BookAppointment";
 import LearnMore from "./pages/LearnMore";
 import SearchDoctor from "./components/SearchDoctor";
 import SearchDoctorPage from "./pages/SearchDoctorPage";
+import Timepicker from "./components/Timepicker";
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
         <Route path="/learnmore" element={<LearnMore/>} />
         <Route path="/searchbardocotor" element={<SearchDoctor/>} />
         <Route path="/searchdoctor" element={<SearchDoctorPage/>} />
+        <Route path="/time" element={<Timepicker/>} />
+
 
       </Routes>
     </BrowserRouter>
